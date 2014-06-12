@@ -48,7 +48,7 @@ public class JigsawCreator {
 	 * @param countLines
 	 * @param countColumns
 	 */
-	public JigsawCreator(int countColumns,int countLines, File jigsawImage) {
+	public JigsawCreator(int countLines, int countColumns, File jigsawImage) {
 		super();
 		this.countColumns=countColumns;
 		this.countLines=countLines;
