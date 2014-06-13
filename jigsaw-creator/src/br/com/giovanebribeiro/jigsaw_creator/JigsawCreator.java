@@ -39,20 +39,21 @@ public class JigsawCreator {
 	private int countLines;
 	private File jigsawImage;
 	
-	private static final String PIECES_FOLDER="pieces";
-	private static final String EXT="png";
 	
+	private static final int TAM_PIECE=2;
+	private static final int CENTIMETER_TO_PIXEL=28; //1 centimeter has x pixels.
+	private static final String jigsawFilename="jigsaw";
 
 	/**
 	 * 
 	 * @param countLines
 	 * @param countColumns
 	 */
-	public JigsawCreator(int countLines, int countColumns, File jigsawImage) {
+	public JigsawCreator(int countLines, int countColumns, File jigsawFolder, FileExtensions extension) {
 		super();
 		this.countColumns=countColumns;
 		this.countLines=countLines;
-		this.jigsawImage=jigsawImage;
+		this.jigsawImage=new File(jigsawFolder,jigsawFilename+"."+extension.name().toLowerCase());
 		this.jigsaw=new LinkedList<LinkedList<Piece>>();
 	}
 	
@@ -60,8 +61,9 @@ public class JigsawCreator {
 	 * 
 	 * @param countLines
 	 * @param countColumns
+	 * @throws IOException 
 	 */
-	private void makePieces(){
+	private void makePieces() throws IOException{
 		LinkedList<Piece> line=null;
 		for(int i=0;i<countLines;i++){
 			line=new LinkedList<Piece>();
@@ -94,24 +96,29 @@ public class JigsawCreator {
 	}
 	
 	private void mountFigure() throws IOException{
-		//each piece has 2cm x 2cm
-		BufferedImage jigsaw=new BufferedImage(countColumns*2,countLines*2,BufferedImage.TYPE_INT_ARGB);
+		int width=countColumns*TAM_PIECE;
+		int height=countLines*TAM_PIECE;
+		
+		//converting to pixels
+		width*=CENTIMETER_TO_PIXEL;
+		height*=CENTIMETER_TO_PIXEL;
+		BufferedImage jigsaw=new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
 		Graphics gJigsaw=jigsaw.getGraphics();
 		
-		for(int i=0;i<3;i++){
+		
+		for(int i=0;i<this.countLines;i++){
 			LinkedList<Piece> line=this.jigsaw.get(i);
-			for(int j=0;j<4;j++){
+			for(int j=0;j<this.countColumns;j++){
 				Piece p=line.get(j);
-				String pieceFilename=p.toFilename();
 				
-				String path=PIECES_FOLDER+"/"+pieceFilename+"."+EXT;
-				BufferedImage imagePiece=ImageIO.read(new File(path));
-				gJigsaw.drawImage(imagePiece,0,0,null);
+				int y=i*TAM_PIECE*CENTIMETER_TO_PIXEL;
+				int x=j*TAM_PIECE*CENTIMETER_TO_PIXEL;
+				gJigsaw.drawImage(p.getImage(),x,y,null);
 				//System.out.println("("+i+","+j+") - "+line.get(j).toFilename());
 			}
 		}
 		
-		ImageIO.write(jigsaw, EXT.toUpperCase(), this.jigsawImage);
+		ImageIO.write(jigsaw, Piece.EXT.toUpperCase(), this.jigsawImage);
 	}
 	
 	public void create() throws IOException{
@@ -120,19 +127,12 @@ public class JigsawCreator {
 	}
 	
 	public static void main(String[] args){
-		JigsawCreator jc=new JigsawCreator(3,4,new File("teste.png"));
+		JigsawCreator jc=new JigsawCreator(1,2,new File("."),FileExtensions.PNG);
 		try {
 			jc.create();
 			System.out.println("Acabou!");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-//		for(int i=0;i<3;i++){
-//			LinkedList<Piece> line=jc.jigsaw.get(i);
-//			for(int j=0;j<4;j++){
-//				System.out.println("("+i+","+j+") - "+line.get(j).toFilename());
-//			}
-//		}
 	}
 }

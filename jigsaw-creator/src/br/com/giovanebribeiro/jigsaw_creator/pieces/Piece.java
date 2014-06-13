@@ -1,6 +1,11 @@
 package br.com.giovanebribeiro.jigsaw_creator.pieces;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 /**
  * Represents a jigsaw piece. A piece have 4 edges:<br>
@@ -35,8 +40,11 @@ public class Piece {
 	private Edge edgeTop;
 	private Edge edgeRight;
 	private Edge edgeDown;
+	private BufferedImage image;
 	
 	private static final Random rand=new Random(6438162837627364L);
+	private static final String PIECES_FOLDER="pieces";
+	public static final String EXT="png";
 
 	/**
 	 * @return the edgeLeft
@@ -94,7 +102,7 @@ public class Piece {
 		this.edgeDown = edgeDown;
 	}
 	
-	public String toFilename(){
+	private void makeFilename() throws IOException{
 		StringBuilder builder=new StringBuilder("piece");
 		builder.append("_");
 		builder.append(getEdgeLeft().name().toLowerCase());
@@ -105,7 +113,16 @@ public class Piece {
 		builder.append("-");
 		builder.append(getEdgeDown().name().toLowerCase());
 		
-		return builder.toString();
+		String path=PIECES_FOLDER+"/"+builder.toString()+"."+EXT;
+		System.out.println(path);
+		this.image=ImageIO.read(new File(path));
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public BufferedImage getImage(){
+		return this.image;
 	}
 
 	/**
@@ -119,8 +136,9 @@ public class Piece {
 	 * @param totalLines
 	 * @param totalColumns
 	 * @return a random piece
+	 * @throws IOException 
 	 */
-	public static Piece getRandomPiece(Piece previousPieceLine, Piece pieceColumnTop,int line, int column, int totalLines, int totalColumns){
+	public static Piece getRandomPiece(Piece previousPieceLine, Piece pieceColumnTop,int line, int column, int totalLines, int totalColumns) throws IOException{
 		/*
 		 * get the edges
 		 */
@@ -197,6 +215,7 @@ public class Piece {
 		ret.setEdgeLeft(leftEdge);
 		ret.setEdgeRight(rightEdge);
 		ret.setEdgeTop(topEdge);
+		ret.makeFilename();
 		
 		return ret;
 	}
