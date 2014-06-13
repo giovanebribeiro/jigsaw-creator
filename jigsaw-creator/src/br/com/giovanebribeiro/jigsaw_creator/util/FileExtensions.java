@@ -1,4 +1,4 @@
-package br.com.giovanebribeiro.jigsaw_creator;
+package br.com.giovanebribeiro.jigsaw_creator.util;
 
 /**
  * Lists the file extensions<br>

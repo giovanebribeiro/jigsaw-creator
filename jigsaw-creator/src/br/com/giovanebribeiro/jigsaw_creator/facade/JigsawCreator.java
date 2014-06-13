@@ -1,4 +1,4 @@
-package br.com.giovanebribeiro.jigsaw_creator;
+package br.com.giovanebribeiro.jigsaw_creator.facade;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import javax.imageio.ImageIO;
 
 import br.com.giovanebribeiro.jigsaw_creator.pieces.Piece;
+import br.com.giovanebribeiro.jigsaw_creator.util.FileExtensions;
 
 /**
  * Jigsaw creator.
@@ -126,13 +127,13 @@ public class JigsawCreator {
 		this.mountFigure();
 	}
 	
-	public static void main(String[] args){
-		JigsawCreator jc=new JigsawCreator(1,2,new File("."),FileExtensions.PNG);
-		try {
-			jc.create();
-			System.out.println("Acabou!");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args){
+//		JigsawCreator jc=new JigsawCreator(1,2,new File("."),FileExtensions.PNG);
+//		try {
+//			jc.create();
+//			System.out.println("Acabou!");
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 }
