@@ -17,24 +17,80 @@
 		GNU General Public License for more details.
 		
 		You should have received a copy of the GNU General Public License
-		along with this program.  If not, see <http://www.gnu.org/licenses/>.
+		along with this program.  If not, see http://www.gnu.org/licenses.
     </description>
-    
-    <property name="build.counter"	value="0"/>
+    <!--
+    #
+    # Change here the version.
+    # 
+     -->
     <property name="build.version"	value="1.0"/>
-    <property name="src"			value="src"/>
-    <property name="config"			value="config"/>
-    <property name="dist"			value="dist"/>
-    <property name="dist.bin"		value="${dist}/bin"/>
-    <property name="dist.config"	value="${dist}/config"/>
-    <property name="dist.exec.sh"	value="${dist}/exec.sh"/>
+    <!-- 
+    #
+    #
+    #
+    #
+    #
+    -->
+    <property name="src"				value="src"/>
+    <property name="config"				value="config"/>
+    <property name="pieces"				value="pieces"/>
+    <property name="dist"				value="dist"/>
+    <property name="dist.bin"			value="${dist}/bin"/>
+    <property name="dist.pieces"		value="${dist}/pieces"/>
+    <property name="dist.exec.sh"		value="${dist}/exec.sh"/>
+    <property name="dist.exec.bat"		value="${dist}/exec.bat"/>
+    <property name="jar.name"			value="jc-${build.version}.jar"/>
+    <property name="zip.name"			value="jigsaw-creator-${build.version}.zip"/>
+    <property name="main.class"			value="br.com.giovanebribeiro.jigsaw_creator.FrameMain"/>
     
     <target name="clean">
         <delete dir="${dist}" quiet="true"/>
         <mkdir dir="${dist}"/>
         <mkdir dir="${dist.bin}"/>
-        <mkdir dir="${dist.config}"/>
+        <mkdir dir="${dist.pieces}"/>
     </target>
     
-    <target name="main" depends="clean"/>
+    <target name="compile">
+        <javac srcdir="${src}" destdir="${dist.bin}" includeAntRuntime="false" verbose="true" failonerror="true"/>
+        <!--Incrementing the build number-->
+        <tstamp> 
+            <format property="current.time" pattern="dd/MM/yyyy hh-mm-ss.SSS aa"/> 
+        </tstamp> 
+
+		<propertyfile file="${config}/messages.properties">
+			<entry key="build" 		type="int" operation="+" default="0"/>
+			<entry key="version"	value="${build.version}"/>
+			<entry key="date"		value="${current.time}"/>
+		</propertyfile>
+		
+		<copy file="${config}/messages.properties" todir="${dist.bin}" verbose="true" failonerror="true"/>
+		
+		<echo message="#!/bin/bash${line.separator}" file="${dist.exec.sh}" append="true"/>
+		<echo message="java -jar ${jar.name}" file="${dist.exec.sh}" append="true"/>
+		<chmod file="${dist.exec.sh}" perm="+x" verbose="yes"/> <!--only for unix systems, by default-->
+		
+		<echo message="@echo off" file="${dist.exec.bat}" append="true"/>
+		<echo message="start javaw -jar ${jar.name}" append="true"/>
+		
+		<copy todir="${dist.pieces}" verbose="true" failonerror="true">
+		    <fileset dir="${pieces}"	includes="*.*"/>
+		</copy>
+    </target>
+    
+    <target name="jar">
+        <jar basedir="${dist.bin}" destfile="${dist}/${jar.name}">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Main-Class" value="${main.class}"/>
+            </manifest>
+        </jar>
+        <delete dir="${dist.bin}" quiet="true"/>
+    </target>
+    
+    <target name="pack">
+        <zip basedir="${dist}" destfile="${zip.name}"/>
+    </target>
+    
+    <target name="main" depends="clean,compile,jar,pack"/>
 </project>

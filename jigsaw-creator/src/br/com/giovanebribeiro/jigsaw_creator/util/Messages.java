@@ -50,6 +50,9 @@ public class Messages {
 	 * @since Jun 12, 2014
 	 */
 	public enum MessageKey{
+		VERSION,
+		BUILD,
+		DATE,
 		LABEL_FILE_EXTENSION,
 		LABEL_ROWS,
 		LABEL_COLUMNS,
@@ -61,6 +64,12 @@ public class Messages {
 		@Override
 		public String toString(){
 			switch(this){
+			case BUILD:
+				return "build";
+			case DATE:
+				return "date";
+			case VERSION:
+				return "version";
 			case LABEL_FILE_EXTENSION:
 				return "label.file_extension";
 			case LABEL_ROWS:

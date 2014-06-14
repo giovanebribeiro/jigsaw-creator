@@ -6,11 +6,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Locale;
-import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -54,9 +50,6 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1527108103757434822L;
-	private static String VERSION;
-	private static String BUILD;
-	private static String DATE;
 	private static final String TITLE="Jigsaw Creator";
 	private static final String AUTHOR="Giovane Boaviagem Ribeiro";
 	private JPanel contentPane;
@@ -68,26 +61,7 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 	private JComboBox<?> comboBox;
 	
 	static{
-		InputStream is=null;
 		
-		Properties prop=new Properties();
-		try {
-			is = new FileInputStream(new File("config/VERSION"));
-			prop.load(is);
-			VERSION=prop.getProperty("version");
-			BUILD=prop.getProperty("build");
-			DATE=prop.getProperty("date");
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally{
-			try {
-				if(is!=null){
-					is.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	/**
@@ -110,7 +84,8 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 	 */
 	public FrameMain() {
 		setResizable(false);
-		setTitle(TITLE+" - "+VERSION);
+		
+		setTitle(TITLE+" - "+Messages.getInstance().get(MessageKey.VERSION));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 385, 281);
 		contentPane = new JPanel();
@@ -133,7 +108,7 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 		buttonChooseFolder.setBounds(317, 14, 49, 25);
 		contentPane.add(buttonChooseFolder);
 		
-		JLabel lblFileExtension = new JLabel(Messages.getInstance().get(MessageKey.LABEL_FILE_EXTENSION));
+		JLabel lblFileExtension = new JLabel(Messages.getInstance().get(MessageKey.LABEL_FILE_EXTENSION)+":");
 		lblFileExtension.setBounds(12, 53, 112, 24);
 		contentPane.add(lblFileExtension);
 		
@@ -145,11 +120,11 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 		progressBar.setBounds(12, 206, 354, 25);
 		contentPane.add(progressBar);
 		
-		JLabel lblRows = new JLabel(Messages.getInstance().get(MessageKey.LABEL_ROWS));
+		JLabel lblRows = new JLabel(Messages.getInstance().get(MessageKey.LABEL_ROWS)+":");
 		lblRows.setBounds(12, 91, 70, 24);
 		contentPane.add(lblRows);
 		
-		JLabel lblColumns = new JLabel(Messages.getInstance().get(MessageKey.LABEL_COLUMNS));
+		JLabel lblColumns = new JLabel(Messages.getInstance().get(MessageKey.LABEL_COLUMNS)+":");
 		lblColumns.setBounds(12, 129, 70, 24);
 		contentPane.add(lblColumns);
 		
@@ -205,7 +180,7 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 	private void actionButtonAbout(){
 		StringBuilder message=new StringBuilder("");
 		message.append("*** "+TITLE+" ***"+"\n");
-		message.append("Version: "+VERSION+" (Build "+BUILD+" - "+DATE+")\n");
+		message.append("Version: "+Messages.getInstance().get(MessageKey.VERSION)+" (Build "+Messages.getInstance().get(MessageKey.BUILD)+" - "+Messages.getInstance().get(MessageKey.DATE)+")\n");
 		message.append("Created by: "+AUTHOR+"\n");
 		message.append("License: GPL");
 		
