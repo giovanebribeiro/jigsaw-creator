@@ -1,6 +1,6 @@
 # Jigsaw Creator
 
-Creates jigsaw models, and saves the images in PNG format. Each piece has 2x2 cm.
+Creates jigsaw models, and saves the images in disk. Each piece has 2x2 cm.
 
 All the translates are available in: 
 https://docs.google.com/spreadsheets/d/1mGCQuadBnl7wTEDXAJT6Ia2qduKLUbVjS15tCghZe8A/edit?usp=sharing
@@ -12,12 +12,13 @@ https://docs.google.com/spreadsheets/d/1mGCQuadBnl7wTEDXAJT6Ia2qduKLUbVjS15tCghZ
 
 ## Usage:
 - (0) Unzip the file in a folder
-- (1) Access the unzip folder
+- (1) Access the folder
 - (2) Execute the file exec.sh (linux) or exec.bat (windows)
 
 ## Changelog:
 ### 1.0 - Build 20 (14/06/2014)
-- Create images in PNG.
+- Create images in:
+	- PNG.
 - GUI
 - Works in Windows / Linux 
 - Supporting locales:
