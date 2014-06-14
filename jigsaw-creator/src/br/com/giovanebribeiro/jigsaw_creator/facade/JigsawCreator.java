@@ -1,19 +1,20 @@
 package br.com.giovanebribeiro.jigsaw_creator.facade;
 
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+import javax.swing.SwingWorker;
 
 import br.com.giovanebribeiro.jigsaw_creator.pieces.Piece;
 import br.com.giovanebribeiro.jigsaw_creator.util.FileExtensions;
-
 /**
- * Jigsaw creator.
- * 
+ * Task to execute the jigsaw creator
  * <br>
  * Copyright (C) 2014  Giovane Boaviagem<br>
  * <br>
@@ -30,110 +31,102 @@ import br.com.giovanebribeiro.jigsaw_creator.util.FileExtensions;
  * You should have received a copy of the GNU General Public License<br>
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.<br>
  * <br>
- * 
  * @author giovane
- * @since Jun 8, 2014
+ * @since Jun 13, 2014
  */
-public class JigsawCreator {
-	private LinkedList<LinkedList<Piece>> jigsaw;
+public class JigsawCreator extends SwingWorker<Void,Void> {
 	private int countColumns;
 	private int countLines;
 	private File jigsawImage;
-	
+	private JProgressBar jpb;
 	
 	private static final int TAM_PIECE=2;
 	private static final int CENTIMETER_TO_PIXEL=28; //1 centimeter has x pixels.
 	private static final String jigsawFilename="jigsaw";
-
+	
 	/**
 	 * 
 	 * @param countLines
 	 * @param countColumns
 	 */
-	public JigsawCreator(int countLines, int countColumns, File jigsawFolder, FileExtensions extension) {
+	public JigsawCreator(int countLines, int countColumns, File jigsawFolder, FileExtensions extension, JProgressBar progressBar) {
 		super();
 		this.countColumns=countColumns;
 		this.countLines=countLines;
 		this.jigsawImage=new File(jigsawFolder,jigsawFilename+"."+extension.name().toLowerCase());
-		this.jigsaw=new LinkedList<LinkedList<Piece>>();
+		this.jpb=progressBar;
+		this.jpb.setValue(0);
 	}
-	
-	/**
-	 * 
-	 * @param countLines
-	 * @param countColumns
-	 * @throws IOException 
-	 */
-	private void makePieces() throws IOException{
-		LinkedList<Piece> line=null;
-		for(int i=0;i<countLines;i++){
-			line=new LinkedList<Piece>();
-			if(i==0){
-				for(int j=0;j<countColumns;j++){
-					Piece piece=null;
-					if(j==0){
-						piece=Piece.getRandomPiece(null, null, i, j, countLines, countColumns);
-					}else{
-						Piece previousPiece=line.get(j-1);
-						piece=Piece.getRandomPiece(previousPiece, null, i, j, countLines, countColumns);
-					}
-					line.add(piece);
-				}
-			}else{
-				LinkedList<Piece> previousLine=this.jigsaw.get(i-1);
-				for(int j=0;j<countColumns;j++){
-					Piece piece=null;
-					if(j==0){
-						piece=Piece.getRandomPiece(null, previousLine.get(j), i, j, countLines, countColumns);
-					}else{
-						Piece previousPiece=line.get(j-1);
-						piece=Piece.getRandomPiece(previousPiece, previousLine.get(j), i, j, countLines, countColumns);
-					}
-					line.add(piece);
-				}
-			}
-			this.jigsaw.add(line);
-		}
-	}
-	
-	private void mountFigure() throws IOException{
+
+	@Override
+	protected Void doInBackground() throws Exception {
+		int progress=0;
+		setProgress(progress);
+		
 		int width=countColumns*TAM_PIECE;
 		int height=countLines*TAM_PIECE;
 		
 		//converting to pixels
 		width*=CENTIMETER_TO_PIXEL;
 		height*=CENTIMETER_TO_PIXEL;
-		BufferedImage jigsaw=new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
-		Graphics gJigsaw=jigsaw.getGraphics();
+		BufferedImage jigsawImage=new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
+		Graphics gJigsaw=jigsawImage.getGraphics();
 		
+		int totalIterations=this.countColumns*this.countLines;
+		totalIterations++;
 		
-		for(int i=0;i<this.countLines;i++){
-			LinkedList<Piece> line=this.jigsaw.get(i);
-			for(int j=0;j<this.countColumns;j++){
-				Piece p=line.get(j);
+		LinkedList<LinkedList<Piece>> jigsaw=new LinkedList<LinkedList<Piece>>();
+		
+		LinkedList<Piece> line=null;
+		for(int i=0;i<countLines;i++){
+			line=new LinkedList<Piece>();
+			
+			for(int j=0;j<countColumns;j++){
+				LinkedList<Piece> previousLine=null;
+				if(i!=0){
+					previousLine=jigsaw.get(i-1);
+				}
 				
+				Piece piece=null;
+				if(j==0){
+					if(previousLine!=null){
+						piece=Piece.getRandomPiece(null, previousLine.get(j), i, j, countLines, countColumns);
+					}else{
+						piece=Piece.getRandomPiece(null, null, i, j, countLines, countColumns);
+					}
+				}else{
+					Piece previousPiece=line.get(j-1);
+					if(previousLine!=null){
+						piece=Piece.getRandomPiece(previousPiece, previousLine.get(j), i, j, countLines, countColumns);
+					}else{
+						piece=Piece.getRandomPiece(previousPiece, null, i, j, countLines, countColumns);
+					}
+				}
+				line.add(piece);
+				/*
+				 * Inserting the image
+				 */
 				int y=i*TAM_PIECE*CENTIMETER_TO_PIXEL;
 				int x=j*TAM_PIECE*CENTIMETER_TO_PIXEL;
-				gJigsaw.drawImage(p.getImage(),x,y,null);
-				//System.out.println("("+i+","+j+") - "+line.get(j).toFilename());
+				gJigsaw.drawImage(piece.getImage(),x,y,null);
+				
+				progress++;
+				setProgress(Math.min(progress*100/totalIterations, 100));
 			}
+			jigsaw.add(line);
 		}
 		
-		ImageIO.write(jigsaw, Piece.EXT.toUpperCase(), this.jigsawImage);
+		ImageIO.write(jigsawImage, Piece.EXT.toUpperCase(), this.jigsawImage);
+		progress++;
+		System.out.println("progress="+progress);
+		setProgress(Math.min(progress*100/totalIterations, 100));
+		
+		return null;
 	}
 	
-	public void create() throws IOException{
-		this.makePieces();
-		this.mountFigure();
+	@Override
+	protected void done() {
+		Toolkit.getDefaultToolkit().beep();
+		JOptionPane.showMessageDialog(null, "Image successfully created.","",JOptionPane.INFORMATION_MESSAGE);
 	}
-	
-//	public static void main(String[] args){
-//		JigsawCreator jc=new JigsawCreator(1,2,new File("."),FileExtensions.PNG);
-//		try {
-//			jc.create();
-//			System.out.println("Acabou!");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
 }

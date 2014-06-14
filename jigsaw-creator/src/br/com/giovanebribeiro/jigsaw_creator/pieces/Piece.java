@@ -114,7 +114,7 @@ public class Piece {
 		builder.append(getEdgeDown().name().toLowerCase());
 		
 		String path=PIECES_FOLDER+"/"+builder.toString()+"."+EXT;
-		System.out.println(path);
+		//System.out.println(path);
 		this.image=ImageIO.read(new File(path));
 	}
 	/**

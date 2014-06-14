@@ -3,6 +3,8 @@ package br.com.giovanebribeiro.jigsaw_creator;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
+import br.com.giovanebribeiro.jigsaw_creator.facade.JigsawCreator;
 import br.com.giovanebribeiro.jigsaw_creator.util.FileExtensions;
 import br.com.giovanebribeiro.jigsaw_creator.util.Messages;
 import br.com.giovanebribeiro.jigsaw_creator.util.Messages.MessageKey;
@@ -46,7 +49,7 @@ import br.com.giovanebribeiro.jigsaw_creator.util.Messages.MessageKey;
  * @author giovane
  * @since Jun 12, 2014
  */
-public class FrameMain extends JFrame {
+public class FrameMain extends JFrame implements PropertyChangeListener{
 	/**
 	 * 
 	 */
@@ -58,9 +61,11 @@ public class FrameMain extends JFrame {
 	private static final String AUTHOR="Giovane Boaviagem Ribeiro";
 	private JPanel contentPane;
 	private JTextField textFieldFolder;
+	private File fileFolder;
 	private JTextField textFieldRows;
 	private JTextField textFieldColumns;
-	private File fileFolder;
+	private JProgressBar progressBar;
+	private JComboBox<?> comboBox;
 	
 	static{
 		InputStream is=null;
@@ -132,11 +137,11 @@ public class FrameMain extends JFrame {
 		lblFileExtension.setBounds(12, 53, 112, 24);
 		contentPane.add(lblFileExtension);
 		
-		JComboBox<?> comboBox = new JComboBox(FileExtensions.values());
+		comboBox = new JComboBox(FileExtensions.values());
 		comboBox.setBounds(142, 53, 75, 24);
 		contentPane.add(comboBox);
 		
-		JProgressBar progressBar = new JProgressBar();
+		progressBar = new JProgressBar(0,100);
 		progressBar.setBounds(12, 206, 354, 25);
 		contentPane.add(progressBar);
 		
@@ -148,17 +153,12 @@ public class FrameMain extends JFrame {
 		lblColumns.setBounds(12, 129, 70, 24);
 		contentPane.add(lblColumns);
 		
-		textFieldRows = new JTextField();
-		textFieldRows.setBounds(142, 91, 75, 24);
-		contentPane.add(textFieldRows);
-		textFieldRows.setColumns(10);
-		
-		textFieldColumns = new JTextField();
-		textFieldColumns.setBounds(142, 129, 75, 24);
-		contentPane.add(textFieldColumns);
-		textFieldColumns.setColumns(10);
-		
 		JButton buttonGenerate = new JButton(Messages.getInstance().get(MessageKey.LABEL_BUTTON_GENERATE));
+		buttonGenerate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionGenerate();
+			}
+		});
 		buttonGenerate.setBounds(43, 167, 117, 25);
 		contentPane.add(buttonGenerate);
 		
@@ -176,6 +176,16 @@ public class FrameMain extends JFrame {
 		txtpnEachPieceHas.setText(Messages.getInstance().get(MessageKey.MESSAGE_PIECE_SIZE));
 		txtpnEachPieceHas.setBounds(229, 51, 137, 102);
 		contentPane.add(txtpnEachPieceHas);
+		
+		textFieldRows = new JTextField();
+		textFieldRows.setBounds(142, 91, 75, 24);
+		contentPane.add(textFieldRows);
+		textFieldRows.setColumns(10);
+		
+		textFieldColumns = new JTextField();
+		textFieldColumns.setColumns(10);
+		textFieldColumns.setBounds(142, 129, 75, 24);
+		contentPane.add(textFieldColumns);
 	}
 	
 	private void actionGetFileFolder(){
@@ -201,4 +211,61 @@ public class FrameMain extends JFrame {
 		
 		JOptionPane.showMessageDialog(null, message.toString(), "", JOptionPane.PLAIN_MESSAGE);
 	}
+	
+	private void actionGenerate(){
+		/*
+		 * Rows
+		 */
+		String sRows=this.textFieldRows.getText();
+		int rows=-1;
+		try{
+			rows=Integer.parseInt(sRows);
+		}catch(NumberFormatException e){
+			JOptionPane.showMessageDialog(null, "Inform a number of rows, please.", "Parameter error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		/*
+		 * Columns
+		 */
+		String sColumns=this.textFieldColumns.getText();
+		int columns=-1;
+		try{
+			columns=Integer.parseInt(sColumns);
+		}catch(NumberFormatException e){
+			JOptionPane.showMessageDialog(null, "Inform a number of columns, please.", "Parameter error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		/*
+		 * File extension
+		 */
+		FileExtensions fe=(FileExtensions) this.comboBox.getSelectedItem();
+		/*
+		 * Folder file
+		 */
+		File imageFolder=this.fileFolder;
+		/*
+		 * Execute the task.
+		 */
+		this.progressBar.setStringPainted(true);
+		JigsawCreator jc=new JigsawCreator(rows, columns, imageFolder, fe, this.progressBar);
+		jc.addPropertyChangeListener(this);
+		jc.execute();
+	}
+	/**
+     * Invoked when task's progress property changes.
+     */
+    public void propertyChange(PropertyChangeEvent evt) {
+    	System.out.println("####"+evt.getPropertyName());
+        if ("progress" == evt.getPropertyName()) {
+            int progress = (Integer) evt.getNewValue();
+            progressBar.setValue(progress);
+            if(progress<99){
+            	progressBar.setString("Creating the image...");
+            }else if(progress==99){
+            	progressBar.setString("Saving the image...");
+            }else{
+            	progressBar.setString("Image saved in "+this.fileFolder.getAbsolutePath());
+            }
+        }
+    }
 }
