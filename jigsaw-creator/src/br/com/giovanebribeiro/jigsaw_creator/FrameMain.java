@@ -87,7 +87,7 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 		
 		setTitle(TITLE+" - "+Messages.getInstance().get(MessageKey.VERSION));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 385, 281);
+		setBounds(100, 100, 385, 335);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -95,7 +95,7 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 		
 		textFieldFolder = new JTextField();
 		textFieldFolder.setEditable(false);
-		textFieldFolder.setBounds(12, 14, 293, 25);
+		textFieldFolder.setBounds(12, 13, 293, 25);
 		contentPane.add(textFieldFolder);
 		textFieldFolder.setColumns(10);
 		
@@ -105,27 +105,27 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 				actionGetFileFolder();
 			}
 		});
-		buttonChooseFolder.setBounds(317, 14, 49, 25);
+		buttonChooseFolder.setBounds(317, 13, 49, 25);
 		contentPane.add(buttonChooseFolder);
 		
 		JLabel lblFileExtension = new JLabel(Messages.getInstance().get(MessageKey.LABEL_FILE_EXTENSION)+":");
-		lblFileExtension.setBounds(12, 53, 112, 24);
+		lblFileExtension.setBounds(12, 51, 261, 24);
 		contentPane.add(lblFileExtension);
 		
 		comboBox = new JComboBox(FileExtensions.values());
-		comboBox.setBounds(142, 53, 75, 24);
+		comboBox.setBounds(291, 51, 75, 24);
 		contentPane.add(comboBox);
 		
 		progressBar = new JProgressBar(0,100);
-		progressBar.setBounds(12, 206, 354, 25);
+		progressBar.setBounds(12, 271, 354, 25);
 		contentPane.add(progressBar);
 		
 		JLabel lblRows = new JLabel(Messages.getInstance().get(MessageKey.LABEL_ROWS)+":");
-		lblRows.setBounds(12, 91, 70, 24);
+		lblRows.setBounds(12, 88, 261, 24);
 		contentPane.add(lblRows);
 		
 		JLabel lblColumns = new JLabel(Messages.getInstance().get(MessageKey.LABEL_COLUMNS)+":");
-		lblColumns.setBounds(12, 129, 70, 24);
+		lblColumns.setBounds(12, 125, 261, 24);
 		contentPane.add(lblColumns);
 		
 		JButton buttonGenerate = new JButton(Messages.getInstance().get(MessageKey.LABEL_BUTTON_GENERATE));
@@ -134,7 +134,7 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 				actionGenerate();
 			}
 		});
-		buttonGenerate.setBounds(43, 167, 117, 25);
+		buttonGenerate.setBounds(12, 228, 154, 31);
 		contentPane.add(buttonGenerate);
 		
 		JButton buttonAbout = new JButton(Messages.getInstance().get(MessageKey.LABEL_BUTTON_ABOUT));
@@ -143,23 +143,23 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 				actionButtonAbout();
 			}
 		});
-		buttonAbout.setBounds(209, 167, 117, 25);
+		buttonAbout.setBounds(215, 228, 151, 31);
 		contentPane.add(buttonAbout);
 		
 		JTextPane txtpnEachPieceHas = new JTextPane();
 		txtpnEachPieceHas.setEditable(false);
 		txtpnEachPieceHas.setText(Messages.getInstance().get(MessageKey.MESSAGE_PIECE_SIZE));
-		txtpnEachPieceHas.setBounds(229, 51, 137, 102);
+		txtpnEachPieceHas.setBounds(12, 162, 354, 53);
 		contentPane.add(txtpnEachPieceHas);
 		
 		textFieldRows = new JTextField();
-		textFieldRows.setBounds(142, 91, 75, 24);
+		textFieldRows.setBounds(291, 88, 75, 24);
 		contentPane.add(textFieldRows);
 		textFieldRows.setColumns(10);
 		
 		textFieldColumns = new JTextField();
 		textFieldColumns.setColumns(10);
-		textFieldColumns.setBounds(142, 129, 75, 24);
+		textFieldColumns.setBounds(291, 125, 75, 24);
 		contentPane.add(textFieldColumns);
 	}
 	
