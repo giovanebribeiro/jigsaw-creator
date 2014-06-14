@@ -70,8 +70,8 @@
 		<echo message="java -jar ${jar.name}" file="${dist.exec.sh}" append="true"/>
 		<chmod file="${dist.exec.sh}" perm="+x" verbose="yes"/> <!--only for unix systems, by default-->
 		
-		<echo message="@echo off" file="${dist.exec.bat}" append="true"/>
-		<echo message="start javaw -jar ${jar.name}" append="true"/>
+		<echo message="@echo off${line.separator}" file="${dist.exec.bat}" append="true"/>
+		<echo message="start java -jar ${jar.name}" file="${dist.exec.bat}" append="true"/>
 		
 		<copy todir="${dist.pieces}" verbose="true" failonerror="true">
 		    <fileset dir="${pieces}"	includes="*.*"/>

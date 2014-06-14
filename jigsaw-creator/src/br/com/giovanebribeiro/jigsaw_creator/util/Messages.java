@@ -58,8 +58,21 @@ public class Messages {
 		LABEL_COLUMNS,
 		LABEL_BUTTON_GENERATE,
 		LABEL_BUTTON_ABOUT,
+		LABEL_VERSION,
+		LABEL_BUILD,
+		LABEL_CREATED_BY,
+		LABEL_LICENCE,
 		MESSAGE_PIECE_SIZE,
-		TITLE_FILE_CHOOSER
+		TITLE_FILE_CHOOSER,
+		MESSAGE_ERROR_NUMBER_ROWS,
+		MESSAGE_TITLE_PARAMETER_ERROR,
+		MESSAGE_ERROR_MINIMUM_NUMBER_ROWS,
+		MESSAGE_ERROR_WRONG_NUMBER_COLUMNS,
+		MESSAGE_ERROR_MINIMUM_NUMBER_COLUMNS,
+		MESSAGE_ERROR_EMPTY_FOLDER,
+		MESSAGE_INFO_CREATING_THE_IMAGE,
+		MESSAGE_INFO_SAVING_THE_IMAGE,
+		MESSAGE_INFO_IMAGE_SAVED_IN
 		;
 		@Override
 		public String toString(){
@@ -84,6 +97,32 @@ public class Messages {
 				return "message.piece_size";
 			case TITLE_FILE_CHOOSER:
 				return "title.file_chooser";
+			case LABEL_VERSION:
+				return "label.version";
+			case LABEL_BUILD:
+				return "label.build";
+			case LABEL_CREATED_BY:
+				return "label.created_by";
+			case LABEL_LICENCE:
+				return "label.licence";
+			case MESSAGE_ERROR_NUMBER_ROWS:
+				return "message.error_number_rows";
+			case MESSAGE_TITLE_PARAMETER_ERROR:
+				return "message.title.parameter_error";
+			case MESSAGE_ERROR_MINIMUM_NUMBER_ROWS:
+				return "message.error_minimum_number_rows";
+			case MESSAGE_ERROR_WRONG_NUMBER_COLUMNS:
+				return "message.error_wrong_number_columns";
+			case MESSAGE_ERROR_MINIMUM_NUMBER_COLUMNS:
+				return "message.error_minimum_number_columns";
+			case MESSAGE_ERROR_EMPTY_FOLDER:
+				return "message.error_empty_folder";
+			case MESSAGE_INFO_CREATING_THE_IMAGE:
+				return "message.info_creating_the_image";
+			case MESSAGE_INFO_SAVING_THE_IMAGE:
+				return "message.info_saving_the_image";
+			case MESSAGE_INFO_IMAGE_SAVED_IN:
+				return "message.info_image_saved_in";
 			default:
 				return "";
 			}

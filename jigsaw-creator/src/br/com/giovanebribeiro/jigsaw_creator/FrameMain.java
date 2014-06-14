@@ -180,9 +180,9 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 	private void actionButtonAbout(){
 		StringBuilder message=new StringBuilder("");
 		message.append("*** "+TITLE+" ***"+"\n");
-		message.append("Version: "+Messages.getInstance().get(MessageKey.VERSION)+" (Build "+Messages.getInstance().get(MessageKey.BUILD)+" - "+Messages.getInstance().get(MessageKey.DATE)+")\n");
-		message.append("Created by: "+AUTHOR+"\n");
-		message.append("License: GPL");
+		message.append(Messages.getInstance().get(MessageKey.LABEL_VERSION)+": "+Messages.getInstance().get(MessageKey.VERSION)+" ("+Messages.getInstance().get(MessageKey.LABEL_BUILD)+" "+Messages.getInstance().get(MessageKey.BUILD)+" - "+Messages.getInstance().get(MessageKey.DATE)+")\n");
+		message.append(Messages.getInstance().get(MessageKey.LABEL_CREATED_BY)+": "+AUTHOR+"\n");
+		message.append(Messages.getInstance().get(MessageKey.LABEL_LICENCE)+": GPL");
 		
 		JOptionPane.showMessageDialog(null, message.toString(), "", JOptionPane.PLAIN_MESSAGE);
 	}
@@ -196,11 +196,11 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 		try{
 			rows=Integer.parseInt(sRows);
 		}catch(NumberFormatException e){
-			JOptionPane.showMessageDialog(null, "Inform a number of rows, please.", "Parameter error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, Messages.getInstance().get(MessageKey.MESSAGE_ERROR_NUMBER_ROWS), Messages.getInstance().get(MessageKey.MESSAGE_TITLE_PARAMETER_ERROR), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		if(rows<=0){
-			JOptionPane.showMessageDialog(null, "The minimum number of rows is 1.", "Parameter error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, Messages.getInstance().get(MessageKey.MESSAGE_ERROR_MINIMUM_NUMBER_ROWS), Messages.getInstance().get(MessageKey.MESSAGE_TITLE_PARAMETER_ERROR), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		/*
@@ -211,11 +211,11 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 		try{
 			columns=Integer.parseInt(sColumns);
 		}catch(NumberFormatException e){
-			JOptionPane.showMessageDialog(null, "Inform a number of columns, please.", "Parameter error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, Messages.getInstance().get(MessageKey.MESSAGE_ERROR_WRONG_NUMBER_COLUMNS), Messages.getInstance().get(MessageKey.MESSAGE_TITLE_PARAMETER_ERROR), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		if(columns<=1){
-			JOptionPane.showMessageDialog(null, "The minimum number of columns is 2.", "Parameter error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, Messages.getInstance().get(MessageKey.MESSAGE_ERROR_MINIMUM_NUMBER_COLUMNS), Messages.getInstance().get(MessageKey.MESSAGE_TITLE_PARAMETER_ERROR), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		/*
@@ -226,7 +226,7 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 		 * Folder file
 		 */
 		if(this.textFieldFolder.getText().equalsIgnoreCase("")){
-			JOptionPane.showMessageDialog(null, "Choose a folder to store the image, please.", "Parameter error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, Messages.getInstance().get(MessageKey.MESSAGE_ERROR_EMPTY_FOLDER), Messages.getInstance().get(MessageKey.MESSAGE_TITLE_PARAMETER_ERROR), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		File imageFolder=this.fileFolder;
@@ -246,11 +246,11 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
             int progress = (Integer) evt.getNewValue();
             progressBar.setValue(progress);
             if(progress<99){
-            	progressBar.setString("Creating the image...");
+            	progressBar.setString(Messages.getInstance().get(MessageKey.MESSAGE_INFO_CREATING_THE_IMAGE));
             }else if(progress==99){
-            	progressBar.setString("Saving the image...");
+            	progressBar.setString(Messages.getInstance().get(MessageKey.MESSAGE_INFO_SAVING_THE_IMAGE));
             }else{
-            	progressBar.setString("Image saved in "+this.fileFolder.getAbsolutePath());
+            	progressBar.setString(Messages.getInstance().get(MessageKey.MESSAGE_INFO_IMAGE_SAVED_IN)+" "+this.fileFolder.getAbsolutePath());
             }
         }
     }
