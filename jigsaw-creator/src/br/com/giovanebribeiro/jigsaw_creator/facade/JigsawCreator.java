@@ -13,6 +13,8 @@ import javax.swing.SwingWorker;
 
 import br.com.giovanebribeiro.jigsaw_creator.pieces.Piece;
 import br.com.giovanebribeiro.jigsaw_creator.util.FileExtensions;
+import br.com.giovanebribeiro.jigsaw_creator.util.Messages;
+import br.com.giovanebribeiro.jigsaw_creator.util.Messages.MessageKey;
 /**
  * Task to execute the jigsaw creator
  * <br>
@@ -53,7 +55,7 @@ public class JigsawCreator extends SwingWorker<Void,Void> {
 		super();
 		this.countColumns=countColumns;
 		this.countLines=countLines;
-		this.jigsawImage=new File(jigsawFolder,jigsawFilename+"."+extension.name().toLowerCase());
+		this.jigsawImage=new File(jigsawFolder,jigsawFilename+"_"+countLines+"_"+countColumns+"."+extension.name().toLowerCase());
 		this.jpb=progressBar;
 		this.jpb.setValue(0);
 	}
@@ -126,6 +128,6 @@ public class JigsawCreator extends SwingWorker<Void,Void> {
 	@Override
 	protected void done() {
 		Toolkit.getDefaultToolkit().beep();
-		JOptionPane.showMessageDialog(null, "Image successfully created.","",JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, Messages.getInstance().get(MessageKey.MESSAGE_INFO_IMAGE_CREATED),"",JOptionPane.INFORMATION_MESSAGE);
 	}
 }

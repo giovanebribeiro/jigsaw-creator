@@ -64,7 +64,9 @@
 			<entry key="date"		value="${current.time}"/>
 		</propertyfile>
 		
-		<copy file="${config}/messages.properties" todir="${dist.bin}" verbose="true" failonerror="true"/>
+		<copy todir="${dist.bin}" verbose="true" failonerror="true">
+		    <fileset dir="${config}" includes="*.properties"/>
+		</copy>
 		
 		<echo message="#!/bin/bash${line.separator}" file="${dist.exec.sh}" append="true"/>
 		<echo message="java -jar ${jar.name}" file="${dist.exec.sh}" append="true"/>

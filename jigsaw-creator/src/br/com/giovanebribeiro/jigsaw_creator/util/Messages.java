@@ -72,7 +72,8 @@ public class Messages {
 		MESSAGE_ERROR_EMPTY_FOLDER,
 		MESSAGE_INFO_CREATING_THE_IMAGE,
 		MESSAGE_INFO_SAVING_THE_IMAGE,
-		MESSAGE_INFO_IMAGE_SAVED_IN
+		MESSAGE_INFO_IMAGE_SAVED_IN,
+		MESSAGE_INFO_IMAGE_CREATED
 		;
 		@Override
 		public String toString(){
@@ -123,6 +124,8 @@ public class Messages {
 				return "message.info_saving_the_image";
 			case MESSAGE_INFO_IMAGE_SAVED_IN:
 				return "message.info_image_saved_in";
+			case MESSAGE_INFO_IMAGE_CREATED:
+				return "message.info_image_created";
 			default:
 				return "";
 			}
