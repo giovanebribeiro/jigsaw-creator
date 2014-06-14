@@ -224,6 +224,10 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 			JOptionPane.showMessageDialog(null, "Inform a number of rows, please.", "Parameter error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+		if(rows<=0){
+			JOptionPane.showMessageDialog(null, "The minimum number of rows is 1.", "Parameter error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 		/*
 		 * Columns
 		 */
@@ -235,6 +239,10 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 			JOptionPane.showMessageDialog(null, "Inform a number of columns, please.", "Parameter error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+		if(columns<=1){
+			JOptionPane.showMessageDialog(null, "The minimum number of columns is 2.", "Parameter error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 		/*
 		 * File extension
 		 */
@@ -242,6 +250,10 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
 		/*
 		 * Folder file
 		 */
+		if(this.textFieldFolder.getText().equalsIgnoreCase("")){
+			JOptionPane.showMessageDialog(null, "Choose a folder to store the image, please.", "Parameter error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 		File imageFolder=this.fileFolder;
 		/*
 		 * Execute the task.
@@ -255,7 +267,6 @@ public class FrameMain extends JFrame implements PropertyChangeListener{
      * Invoked when task's progress property changes.
      */
     public void propertyChange(PropertyChangeEvent evt) {
-    	System.out.println("####"+evt.getPropertyName());
         if ("progress" == evt.getPropertyName()) {
             int progress = (Integer) evt.getNewValue();
             progressBar.setValue(progress);

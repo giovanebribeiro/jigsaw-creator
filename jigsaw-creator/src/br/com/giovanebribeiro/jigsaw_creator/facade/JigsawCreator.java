@@ -118,7 +118,6 @@ public class JigsawCreator extends SwingWorker<Void,Void> {
 		
 		ImageIO.write(jigsawImage, Piece.EXT.toUpperCase(), this.jigsawImage);
 		progress++;
-		System.out.println("progress="+progress);
 		setProgress(Math.min(progress*100/totalIterations, 100));
 		
 		return null;
